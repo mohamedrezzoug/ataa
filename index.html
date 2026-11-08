@@ -155,7 +155,7 @@ function fmtDT(s){ if(!s) return '—'; const d = new Date(s); if(isNaN(d)) retu
 function fmtD(s){ if(!s) return '—'; const d = new Date(s); if(isNaN(d)) return '—';
   return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`; }
 function money(n){ n = Number(n); if(!isFinite(n)) return '—';
-  return n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}).replace(/,/g,' ') + ' درهم'; }
+  return n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}).replace(/,/g,'\u00A0').replace('.',',') + ' درهم'; }
 function left(s){
   if(!s) return {t:'بدون أجل', c:'b-mut', d:null};
   const ms = new Date(s) - Date.now(); if(isNaN(ms)) return {t:'—', c:'b-mut', d:null};

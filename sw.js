@@ -1,4 +1,4 @@
-const CACHE = 'ataa-v1';
+const CACHE = 'ataa-v2';
 const FILES = ['./', './index.html', './manifest.json', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', e => {
