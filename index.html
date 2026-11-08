@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f3a5f">
+<title>عطاء – مساعد الصفقات العمومية</title>
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" href="./icons/icon-192.png">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pri:#1f3a5f; --pri2:#2c5282; --gold:#c9a227; --bg:#f4f6fa; --card:#fff;
+  --txt:#1b2536; --mut:#6b778c; --line:#e2e7f0;
+  --ok:#1f8a4c; --warn:#d9822b; --bad:#c53030; --okbg:#e6f6ec; --warnbg:#fdf0e1; --badbg:#fbe9e9;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{font-family:'Cairo',system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--txt);
+  padding-bottom:calc(72px + env(safe-area-inset-bottom));line-height:1.6;font-size:16px}
+header{background:var(--pri);color:#fff;padding:14px 16px;position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px}
+header h1{font-size:1.2rem;margin:0;flex:1}
+header small{opacity:.75;font-weight:400}
+main{max-width:820px;margin:0 auto;padding:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+.card h3{margin:0 0 8px;font-size:1.05rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:12px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center}
+.stat b{display:block;font-size:1.6rem;color:var(--pri)}
+.stat span{color:var(--mut);font-size:.85rem}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.sp{flex:1}
+.muted{color:var(--mut);font-size:.88rem}
+.badge{display:inline-block;padding:2px 10px;border-radius:99px;font-size:.78rem;font-weight:600}
+.b-ok{background:var(--okbg);color:var(--ok)} .b-warn{background:var(--warnbg);color:var(--warn)}
+.b-bad{background:var(--badbg);color:var(--bad)} .b-mut{background:#eceff5;color:var(--mut)}
+.b-pri{background:#e4ecf8;color:var(--pri2)}
+button,.btn{font-family:inherit;font-size:.95rem;border:0;border-radius:10px;padding:9px 14px;cursor:pointer;
+  background:var(--pri);color:#fff;font-weight:600}
+button.sec{background:#e9eef7;color:var(--pri)} button.danger{background:var(--badbg);color:var(--bad)}
+button.gold{background:var(--gold);color:#222}
+button.sm{padding:5px 10px;font-size:.82rem}
+button:active{opacity:.8}
+input,select,textarea{font-family:inherit;font-size:1rem;width:100%;padding:9px 10px;border:1px solid var(--line);
+  border-radius:10px;background:#fff;color:var(--txt)}
+textarea{min-height:80px;resize:vertical}
+label{display:block;font-size:.85rem;color:var(--mut);margin:10px 0 3px}
+.item{display:block;text-decoration:none;color:inherit;cursor:pointer}
+.item .t{font-weight:700}
+.bar{height:8px;background:#e8ecf3;border-radius:99px;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:var(--ok);border-radius:99px}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:8px}
+.chip{white-space:nowrap;background:#e9eef7;color:var(--pri);border-radius:99px;padding:5px 12px;font-size:.85rem;cursor:pointer;font-weight:600}
+.chip.on{background:var(--pri);color:#fff}
+nav{position:fixed;bottom:0;inset-inline:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:30;
+  padding-bottom:env(safe-area-inset-bottom)}
+nav a{flex:1;text-align:center;padding:8px 2px 6px;font-size:.74rem;color:var(--mut);cursor:pointer;font-weight:600}
+nav a span{display:block;font-size:1.3rem;line-height:1.2}
+nav a.on{color:var(--pri)}
+.fab{position:fixed;bottom:calc(82px + env(safe-area-inset-bottom));inset-inline-start:16px;z-index:25;border-radius:99px;
+  padding:12px 18px;box-shadow:0 6px 18px rgba(31,58,95,.35);background:var(--gold);color:#222}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--line)}
+.chk input{width:22px;height:22px;margin-top:3px;flex:none}
+.chk.done span{text-decoration:line-through;color:var(--mut)}
+.grp{font-weight:700;color:var(--pri2);margin:12px 0 2px}
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:50;display:none;align-items:flex-end;justify-content:center}
+.modal.show{display:flex}
+.sheet{background:#fff;width:100%;max-width:620px;max-height:92vh;overflow:auto;border-radius:18px 18px 0 0;padding:16px}
+.sheet h3{margin-top:0}
+.res{background:#f1f5fb;border-radius:10px;padding:10px;margin-top:10px}
+.res div{display:flex;justify-content:space-between;gap:8px;padding:3px 0}
+.res b{color:var(--pri)}
+.note{background:var(--warnbg);color:#8a5412;border-radius:10px;padding:8px 10px;font-size:.84rem;margin-top:10px}
+pre.tpl{white-space:pre-wrap;font-family:inherit;background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:12px;font-size:.95rem}
+.toast{position:fixed;bottom:calc(90px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:#222;color:#fff;
+  padding:8px 16px;border-radius:99px;z-index:60;font-size:.9rem;display:none}
+.empty{text-align:center;color:var(--mut);padding:26px 10px}
+.empty b{display:block;font-size:2rem}
+#printArea{display:none}
+@media print{
+  body>*:not(#printArea){display:none!important}
+  #printArea{display:block;white-space:pre-wrap;font-size:14pt;line-height:1.9;padding:10mm}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>📑 عطاء <small>مساعد الصفقات العمومية</small></h1>
+</header>
+<main id="app"></main>
+<button class="fab" id="fab" data-a="addTender" style="display:none">＋ صفقة جديدة</button>
+<nav id="nav">
+  <a data-v="home"><span>🏠</span>الرئيسية</a>
+  <a data-v="tenders"><span>📂</span>الصفقات</a>
+  <a data-v="docs"><span>🗂️</span>وثائقي</a>
+  <a data-v="tools"><span>🧮</span>أدوات</a>
+</nav>
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+<div id="printArea"></div>
+
+<script>
+'use strict';
+/* ========== البيانات ========== */
+const KEY = 'ataa_v1';
+const EMPTY = () => ({ tenders: [], docs: [], company: {} });
+let S = load();
+function load(){
+  try { const r = JSON.parse(localStorage.getItem(KEY)); return Object.assign(EMPTY(), r || {}); }
+  catch(e){ return EMPTY(); }
+}
+function save(){
+  try { localStorage.setItem(KEY, JSON.stringify(S)); }
+  catch(e){ toast('تعذّر الحفظ: التخزين ممتلئ أو ممنوع'); }
+}
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const $ = s => document.querySelector(s);
+
+/* ========== ثوابت ========== */
+const TYPES = { ao:'طلب عروض مفتوح', bc:'سند طلب', autre:'مسطرة أخرى' };
+const CATS = { travaux:'أشغال', fournitures:'توريدات', services:'خدمات', etudes:'دراسات' };
+const STATUS = {
+  prep:{l:'قيد التحضير', c:'b-pri'}, sent:{l:'تم الإيداع', c:'b-warn'},
+  won:{l:'فزنا بها', c:'b-ok'}, lost:{l:'لم نفز', c:'b-mut'}, cancel:{l:'ملغاة', c:'b-mut'}
+};
+const DOC_PRESETS = ['الشهادة الجبائية','شهادة الضمان الاجتماعي (CNSS)','السجل التجاري (نموذج J)','شهادة التصنيف والتأهيل','شهادة المراجع / الاستلام','بوليصة التأمين','شهادة بنكية (RIB)'];
+
+const ITEMS = [
+  { k:'decl',  g:'الملف الإداري', l:'التصريح بالشرف (حسب النموذج الرسمي)' },
+  { k:'rc',    g:'الملف الإداري', l:'وثيقة التعريف بالمقاولة (السجل التجاري / ICE)' },
+  { k:'fisc',  g:'الملف الإداري', l:'الشهادة الجبائية سارية المفعول' },
+  { k:'cnss',  g:'الملف الإداري', l:'شهادة الضمان الاجتماعي سارية المفعول' },
+  { k:'pouv',  g:'الملف الإداري', l:'التوكيل / وثيقة تفويض الإمضاء (إن وجد)' },
+  { k:'cprov', g:'الملف الإداري', l:'شهادة الضمان المؤقت (إن كان مطلوباً)', when:t=>t.type==='ao' },
+  { k:'class', g:'الملف التقني', l:'شهادة التصنيف والتأهيل (إن كانت مطلوبة)', when:t=>t.cat==='travaux' },
+  { k:'refs',  g:'الملف التقني', l:'المراجع وشواهد الاستلام', when:t=>t.type!=='bc' },
+  { k:'meth',  g:'الملف التقني', l:'المذكرة التقنية / المنهجية', when:t=>t.type==='ao' },
+  { k:'moy',   g:'الملف التقني', l:'الوسائل البشرية والمادية', when:t=>t.type==='ao' },
+  { k:'cps',   g:'الملف التقني', l:'دفتر الشروط الخاصة موقّع ومؤشَّر على صفحاته', when:t=>t.type==='ao' },
+  { k:'eng',   g:'العرض المالي', l:'عقد الالتزام (موقّع ومختوم)' },
+  { k:'bpdq',  g:'العرض المالي', l:'جدول الأثمان / التفصيل الكمي والتقديري' },
+  { k:'calc',  g:'العرض المالي', l:'مراجعة العمليات الحسابية (HT / TVA / TTC)' },
+  { k:'env',   g:'الإيداع', l:'الظرف مختوم ومعنون كما ينص نظام الاستشارة (أو الإيداع الإلكتروني بالبوابة)' },
+  { k:'date',  g:'الإيداع', l:'التأكد من آخر أجل وساعة الإيداع' }
+];
+const itemsFor = t => ITEMS.filter(i => !i.when || i.when(t));
+
+/* ========== أدوات ========== */
+const pad = n => String(n).padStart(2, '0');
+function fmtDT(s){ if(!s) return '—'; const d = new Date(s); if(isNaN(d)) return '—';
+  return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`; }
+function fmtD(s){ if(!s) return '—'; const d = new Date(s); if(isNaN(d)) return '—';
+  return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`; }
+function money(n){ n = Number(n); if(!isFinite(n)) return '—';
+  return n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}).replace(/,/g,' ') + ' درهم'; }
+function left(s){
+  if(!s) return {t:'بدون أجل', c:'b-mut', d:null};
+  const ms = new Date(s) - Date.now(); if(isNaN(ms)) return {t:'—', c:'b-mut', d:null};
+  if(ms < 0) return {t:'فات الأجل', c:'b-bad', d:-1};
+  const days = Math.floor(ms/864e5), hrs = Math.floor((ms%864e5)/36e5);
+  const t = days > 0 ? `باقي ${days} يوم${hrs?` و${hrs} س`:''}` : `باقي ${hrs} ساعة`;
+  return {t, c: days < 3 ? 'b-bad' : days < 7 ? 'b-warn' : 'b-ok', d:days};
+}
+function progress(t){
+  const its = itemsFor(t); const ck = t.checklist || {};
+  const done = its.filter(i => ck[i.k]).length;
+  return { done, total: its.length, pct: its.length ? Math.round(done*100/its.length) : 0 };
+}
+function docState(d){
+  if(!d.expiry) return {t:'بدون تاريخ', c:'b-mut', o:2};
+  const days = Math.floor((new Date(d.expiry+'T23:59:59') - Date.now())/864e5);
+  if(days < 0) return {t:'منتهية', c:'b-bad', o:0};
+  if(days <= 30) return {t:`تنتهي بعد ${days} يوم`, c:'b-warn', o:1};
+  return {t:'سارية', c:'b-ok', o:3};
+}
+let tt;
+function toast(m){ const e = $('#toast'); e.textContent = m; e.style.display = 'block'; clearTimeout(tt); tt = setTimeout(()=>e.style.display='none', 2200); }
+const isActive = t => t.status === 'prep' || t.status === 'sent';
+
+/* ========== التوجيه ========== */
+let view = 'home', curId = null, filter = 'all';
+function go(v, id){ view = v; curId = id || null; render(); window.scrollTo(0,0); }
+function render(){
+  document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('on', a.dataset.v === (view === 'tender' ? 'tenders' : view)));
+  $('#fab').style.display = (view === 'tenders') ? 'block' : 'none';
+  const m = {home:vHome, tenders:vTenders, tender:vTender, docs:vDocs, tools:vTools};
+  $('#app').innerHTML = (m[view] || vHome)();
+  bindCalc();
+}
+
+/* ========== الرئيسية ========== */
+function vHome(){
+  const act = S.tenders.filter(isActive);
+  const up = act.filter(t => t.deadline && left(t.deadline).d !== -1).sort((a,b) => new Date(a.deadline) - new Date(b.deadline));
+  const badDocs = S.docs.filter(d => docState(d).o <= 1);
+  const next = up[0];
+  let h = `<div class="grid">
+    <div class="stat"><b>${act.length}</b><span>صفقات جارية</span></div>
+    <div class="stat"><b>${next ? (left(next.deadline).d ?? 0) : '—'}</b><span>${next ? 'أيام لأقرب أجل' : 'لا أجل قريب'}</span></div>
+    <div class="stat"><b>${badDocs.length}</b><span>وثائق تحتاج تجديد</span></div>
+    <div class="stat"><b>${S.tenders.filter(t=>t.status==='won').length}</b><span>صفقات فزنا بها</span></div>
+  </div>`;
+  if(badDocs.length){
+    h += `<div class="card"><h3>⚠️ وثائق المقاولة</h3>` + badDocs.map(d => {
+      const s = docState(d);
+      return `<div class="row" style="padding:4px 0"><span class="sp">${esc(d.name)}</span><span class="badge ${s.c}">${s.t}</span></div>`;
+    }).join('') + `<button class="sec sm" data-a="goDocs" style="margin-top:8px">إدارة الوثائق</button></div>`;
+  }
+  h += `<div class="card"><h3>⏰ أقرب الآجال</h3>`;
+  if(!up.length) h += `<div class="empty"><b>🗓️</b>ما كاين حتى أجل قريب. زيد صفقة من تبويب «الصفقات».</div>`;
+  else h += up.slice(0,6).map(t => {
+    const l = left(t.deadline), p = progress(t);
+    return `<a class="item" data-a="open" data-id="${t.id}" style="padding:8px 0;border-bottom:1px dashed var(--line)">
+      <div class="row"><span class="t sp">${esc(t.ref || 'بدون رقم')} – ${esc(t.objet || '')}</span><span class="badge ${l.c}">${l.t}</span></div>
+      <div class="muted">${fmtDT(t.deadline)} · الملف ${p.pct}%</div></a>`;
+  }).join('');
+  h += `</div>`;
+  if(!S.tenders.length) h += `<div class="card"><h3>👋 مرحبا</h3><div class="muted">بدا بإضافة أول صفقة، وبعدها دير قائمة الوثائق ديال مقاولتك فتبويب «وثائقي».</div>
+    <button data-a="addTender" style="margin-top:10px">＋ صفقة جديدة</button></div>`;
+  h += disclaimer();
+  return h;
+}
+function disclaimer(){
+  return `<div class="note">⚖️ القوائم والنماذج هنا إرشادية ومبنية على الممارسة العامة للمرسوم 2-22-431. المرجع النهائي دائماً هو <b>إعلان الصفقة ونظام الاستشارة ودفتر الشروط الخاصة</b> ديال كل صفقة.</div>`;
+}
+
+/* ========== الصفقات ========== */
+function vTenders(){
+  const chips = [['all','الكل']].concat(Object.entries(STATUS).map(([k,v]) => [k, v.l]));
+  let list = S.tenders.slice().sort((a,b) => (a.deadline||'9') < (b.deadline||'9') ? -1 : 1);
+  if(filter !== 'all') list = list.filter(t => t.status === filter);
+  let h = `<div class="chips">${chips.map(([k,l]) => `<span class="chip ${filter===k?'on':''}" data-a="filter" data-id="${k}">${l}</span>`).join('')}</div>`;
+  if(!list.length) return h + `<div class="empty"><b>📂</b>ما كاين حتى صفقة هنا.<br>كليكي على «صفقة جديدة».</div>`;
+  h += list.map(t => {
+    const l = left(t.deadline), p = progress(t), s = STATUS[t.status] || STATUS.prep;
+    return `<a class="card item" data-a="open" data-id="${t.id}">
+      <div class="row"><span class="t sp">${esc(t.ref || 'بدون رقم')}</span><span class="badge ${s.c}">${s.l}</span></div>
+      <div>${esc(t.objet || '')}</div>
+      <div class="muted">${esc(t.acheteur || '')} · ${TYPES[t.type] || ''} · ${CATS[t.cat] || ''}</div>
+      <div class="row" style="margin-top:6px"><span class="muted sp">آخر أجل: ${fmtDT(t.deadline)}</span>${isActive(t) ? `<span class="badge ${l.c}">${l.t}</span>` : ''}</div>
+      <div class="bar"><i style="width:${p.pct}%"></i></div><div class="muted">${p.done}/${p.total} وثيقة جاهزة</div></a>`;
+  }).join('');
+  return h;
+}
+
+function vTender(){
+  const t = S.tenders.find(x => x.id === curId);
+  if(!t){ return `<div class="empty">الصفقة ما بقاتش موجودة.</div><button data-a="back">رجوع</button>`; }
+  const s = STATUS[t.status] || STATUS.prep, l = left(t.deadline), p = progress(t), ck = t.checklist || {};
+  let h = `<button class="sec sm" data-a="back">← الصفقات</button>
+  <div class="card" style="margin-top:10px">
+    <div class="row"><h3 class="sp" style="margin:0">${esc(t.ref || 'بدون رقم')}</h3><span class="badge ${s.c}">${s.l}</span></div>
+    <div style="margin:6px 0">${esc(t.objet || '')}</div>
+    <div class="muted">🏛️ ${esc(t.acheteur || '—')}</div>
+    <div class="muted">📌 ${TYPES[t.type] || ''} · ${CATS[t.cat] || ''}</div>
+    <div class="muted">💰 التقدير: ${t.estimate ? money(t.estimate) : '—'}</div>
+    <div class="muted">📥 آخر أجل للإيداع: ${fmtDT(t.deadline)} ${isActive(t) && t.deadline ? `<span class="badge ${l.c}">${l.t}</span>` : ''}</div>
+    <div class="muted">🔓 فتح الأظرفة: ${fmtDT(t.opening)}</div>
+    <div class="row" style="margin-top:10px">
+      <button class="sec sm" data-a="editTender" data-id="${t.id}">✏️ تعديل</button>
+      <button class="sec sm" data-a="toTools" data-id="${t.id}">📝 النماذج</button>
+      <button class="danger sm" data-a="delTender" data-id="${t.id}">🗑️ حذف</button>
+    </div>
+  </div>
+  <div class="card"><div class="row"><h3 class="sp" style="margin:0">✅ قائمة الوثائق</h3><b>${p.pct}%</b></div>
+  <div class="bar"><i style="width:${p.pct}%"></i></div>`;
+  let g = '';
+  itemsFor(t).forEach(i => {
+    if(i.g !== g){ g = i.g; h += `<div class="grp">${g}</div>`; }
+    h += `<label class="chk ${ck[i.k] ? 'done' : ''}" style="margin:0;color:inherit;font-size:1rem">
+      <input type="checkbox" data-a="check" data-id="${t.id}" data-k="${i.k}" ${ck[i.k] ? 'checked' : ''}><span>${i.l}</span></label>`;
+  });
+  h += `</div><div class="card"><h3>🗒️ ملاحظات</h3>
+    <textarea data-a="notes" data-id="${t.id}" placeholder="شروط خاصة، ملاحظات من الزيارة، أسئلة لصاحب المشروع...">${esc(t.notes || '')}</textarea></div>` + disclaimer();
+  return h;
+}
+
+function tenderForm(t){
+  t = t || { type:'ao', cat:'travaux', status:'prep' };
+  const opt = (o, v) => Object.entries(o).map(([k, x]) => `<option value="${k}" ${k===v?'selected':''}>${typeof x === 'string' ? x : x.l}</option>`).join('');
+  $('#sheet').innerHTML = `<h3>${t.id ? 'تعديل الصفقة' : 'صفقة جديدة'}</h3>
+  <label>رقم الصفقة / المرجع</label><input id="f_ref" value="${esc(t.ref)}" placeholder="مثال: 05/2026/ج.م">
+  <label>موضوع الصفقة</label><textarea id="f_objet" style="min-height:60px">${esc(t.objet)}</textarea>
+  <label>صاحب المشروع (الجهة)</label><input id="f_acheteur" value="${esc(t.acheteur)}">
+  <div class="row"><div class="sp"><label>المسطرة</label><select id="f_type">${opt(TYPES, t.type)}</select></div>
+  <div class="sp"><label>النوع</label><select id="f_cat">${opt(CATS, t.cat)}</select></div></div>
+  <label>التقدير المالي للإدارة (درهم، اختياري)</label><input id="f_estimate" type="number" inputmode="decimal" value="${esc(t.estimate)}">
+  <label>آخر أجل لإيداع العروض</label><input id="f_deadline" type="datetime-local" value="${esc(t.deadline)}">
+  <label>تاريخ فتح الأظرفة</label><input id="f_opening" type="datetime-local" value="${esc(t.opening)}">
+  <label>الحالة</label><select id="f_status">${opt(STATUS, t.status)}</select>
+  <div class="row" style="margin-top:14px"><button class="sp" data-a="saveTender" data-id="${t.id || ''}">حفظ</button>
+  <button class="sec" data-a="closeModal">إلغاء</button></div>`;
+  $('#modal').classList.add('show');
+}
+
+/* ========== وثائقي ========== */
+function vDocs(){
+  const c = S.company || {};
+  const docs = S.docs.slice().sort((a,b) => docState(a).o - docState(b).o);
+  let h = `<div class="card"><div class="row"><h3 class="sp" style="margin:0">🗂️ وثائق المقاولة</h3><button class="sm" data-a="addDoc">＋ إضافة</button></div>`;
+  if(!docs.length) h += `<div class="empty"><b>🗂️</b>سجّل وثائقك وتواريخ انتهائها باش نذكّرك قبل ما تفوت.</div>`;
+  h += docs.map(d => { const s = docState(d);
+    return `<div class="row" style="padding:8px 0;border-bottom:1px dashed var(--line)">
+      <div class="sp"><div class="t" style="font-weight:700">${esc(d.name)}</div><div class="muted">ينتهي: ${fmtD(d.expiry)}${d.note ? ' · ' + esc(d.note) : ''}</div></div>
+      <span class="badge ${s.c}">${s.t}</span>
+      <button class="sec sm" data-a="editDoc" data-id="${d.id}">✏️</button>
+      <button class="danger sm" data-a="delDoc" data-id="${d.id}">🗑️</button></div>`; }).join('');
+  h += `</div><div class="card"><h3>🏢 معلومات المقاولة</h3>
+  <div class="muted">كتعمّر أوتوماتيكياً فالنماذج (التصريح بالشرف...).</div>
+  ${[['name','اسم المقاولة'],['manager','الممثل القانوني'],['role','الصفة (مسير، مدير...)'],['address','العنوان'],['rc','السجل التجاري (RC)'],['if','التعريف الضريبي (IF)'],['cnss','رقم الضمان الاجتماعي'],['ice','ICE']]
+    .map(([k,l]) => `<label>${l}</label><input data-a="company" data-k="${k}" value="${esc(c[k])}">`).join('')}
+  </div>`;
+  return h;
+}
+function docForm(d){
+  d = d || {};
+  $('#sheet').innerHTML = `<h3>${d.id ? 'تعديل وثيقة' : 'وثيقة جديدة'}</h3>
+  <label>اسم الوثيقة</label><input id="d_name" list="dl" value="${esc(d.name)}"><datalist id="dl">${DOC_PRESETS.map(x => `<option value="${x}">`).join('')}</datalist>
+  <label>تاريخ انتهاء الصلاحية</label><input id="d_exp" type="date" value="${esc(d.expiry)}">
+  <label>ملاحظة (اختياري)</label><input id="d_note" value="${esc(d.note)}">
+  <div class="row" style="margin-top:14px"><button class="sp" data-a="saveDoc" data-id="${d.id || ''}">حفظ</button><button class="sec" data-a="closeModal">إلغاء</button></div>`;
+  $('#modal').classList.add('show');
+}
+
+/* ========== أدوات ========== */
+let tplTender = '';
+function vTools(){
+  const tOpts = `<option value="">— بدون صفقة —</option>` + S.tenders.map(t => `<option value="${t.id}" ${t.id===tplTender?'selected':''}>${esc(t.ref || 'بدون رقم')} – ${esc((t.objet||'').slice(0,40))}</option>`).join('');
+  return `
+  <div class="card"><h3>🛡️ حاسبة الضمان</h3>
+    <label>المبلغ التقديري أو مبلغ الصفقة (درهم)</label><input id="g_amt" type="number" inputmode="decimal" data-calc="g">
+    <div class="row"><div class="sp"><label>نسبة الضمان المؤقت %</label><input id="g_p" type="number" step="0.01" value="1" data-calc="g"></div>
+    <div class="sp"><label>نسبة الضمان النهائي %</label><input id="g_f" type="number" step="0.01" value="3" data-calc="g"></div></div>
+    <div class="res" id="g_res"><div class="muted">دخل المبلغ باش تبان النتيجة</div></div>
+    <div class="note">النسب افتراضية وقابلة للتعديل. خُذ المبلغ والنسبة الحقيقيين من إعلان الصفقة / نظام الاستشارة.</div></div>
+
+  <div class="card"><h3>🧾 حاسبة العرض (HT ← TTC)</h3>
+    <label>مبلغ العرض بدون احتساب الرسوم HT (درهم)</label><input id="o_ht" type="number" inputmode="decimal" data-calc="o">
+    <div class="row"><div class="sp"><label>TVA %</label><input id="o_tva" type="number" value="20" data-calc="o"></div>
+    <div class="sp"><label>تقدير الإدارة TTC (اختياري)</label><input id="o_est" type="number" inputmode="decimal" data-calc="o"></div></div>
+    <div class="res" id="o_res"><div class="muted">دخل مبلغ HT</div></div></div>
+
+  <div class="card"><h3>📝 النماذج الجاهزة</h3>
+    <label>الصفقة</label><select id="tpl_t" data-a="tplTender">${tOpts}</select>
+    <div class="row" style="margin-top:10px"><button class="sm" data-a="tpl" data-id="decl">تصريح بالشرف</button>
+    <button class="sm sec" data-a="tpl" data-id="depot">رسالة إيداع العرض</button></div>
+    <div id="tpl_out"></div>
+    <div class="note">نموذج مبسّط للمساعدة. إذا فرض نظام الاستشارة نموذجاً رسمياً (ملحق)، استعمل الرسمي.</div></div>
+
+  <div class="card"><h3>💾 النسخ الاحتياطي</h3>
+    <div class="muted">المعطيات كتتخزن فهاتفك فقط. دير نسخة احتياطية من وقت لآخر.</div>
+    <div class="row" style="margin-top:10px"><button class="sm" data-a="export">⬇️ تصدير</button>
+    <button class="sm sec" data-a="import">⬆️ استيراد</button>
+    <button class="sm danger" data-a="reset">مسح الكل</button></div>
+    <input type="file" id="impf" accept="application/json" style="display:none"></div>`;
+}
+function bindCalc(){ if(view === 'tools'){ calcG(); calcO(); } }
+const num = id => { const v = parseFloat(($(id) || {}).value); return isFinite(v) ? v : 0; };
+function calcG(){
+  const a = num('#g_amt'), el = $('#g_res'); if(!el) return;
+  if(!a){ el.innerHTML = '<div class="muted">دخل المبلغ باش تبان النتيجة</div>'; return; }
+  el.innerHTML = `<div><span>الضمان المؤقت</span><b>${money(a * num('#g_p') / 100)}</b></div>
+                  <div><span>الضمان النهائي</span><b>${money(a * num('#g_f') / 100)}</b></div>`;
+}
+function calcO(){
+  const ht = num('#o_ht'), el = $('#o_res'); if(!el) return;
+  if(!ht){ el.innerHTML = '<div class="muted">دخل مبلغ HT</div>'; return; }
+  const tva = ht * num('#o_tva') / 100, ttc = ht + tva, est = num('#o_est');
+  let h = `<div><span>TVA</span><b>${money(tva)}</b></div><div><span>المجموع TTC</span><b>${money(ttc)}</b></div>`;
+  if(est){ const e = (ttc - est) * 100 / est;
+    h += `<div><span>الفرق عن تقدير الإدارة</span><b style="color:${Math.abs(e) > 20 ? 'var(--bad)' : 'var(--ok)'}">${e > 0 ? '+' : ''}${e.toFixed(2)} %</b></div>`; }
+  el.innerHTML = h;
+}
+function tplText(kind){
+  const c = S.company || {}, t = S.tenders.find(x => x.id === tplTender) || {};
+  const v = (x, ph) => x ? x : `[${ph}]`;
+  const hdr = `${v(c.name,'اسم المقاولة')}\n${v(c.address,'العنوان')}`;
+  if(kind === 'decl') return `تصريح بالشرف
+
+أنا الموقع أسفله ${v(c.manager,'الاسم الكامل')}، بصفتي ${v(c.role,'الصفة')} لـ ${v(c.name,'اسم المقاولة')}، الكائن مقرها بـ ${v(c.address,'العنوان')}،
+الحامل لرقم السجل التجاري ${v(c.rc,'RC')}، ورقم التعريف الضريبي ${v(c.if,'IF')}، ورقم الانخراط في الضمان الاجتماعي ${v(c.cnss,'CNSS')}، ورقم ICE ${v(c.ice,'ICE')}،
+
+وفي إطار ${TYPES[t.type] || 'الصفقة'} رقم ${v(t.ref,'رقم الصفقة')} المتعلق بـ ${v(t.objet,'موضوع الصفقة')} لفائدة ${v(t.acheteur,'صاحب المشروع')}،
+
+أصرّح بشرفي:
+1. أنني أتوفر على الأهلية القانونية للتعاقد، وأنني لست في حالة التصفية القضائية أو التسوية القضائية.
+2. أنني في وضعية سليمة إزاء الإدارة الجبائية والصندوق الوطني للضمان الاجتماعي.
+3. أنني لا أوجد في إحدى حالات الإقصاء من المشاركة في الصفقات العمومية المنصوص عليها في النصوص الجاري بها العمل.
+4. أنني لم ولن أقوم، مباشرة أو بصفة غير مباشرة، بأي فعل من أفعال الغش أو الرشوة أو التأثير على مسطرة إبرام هذه الصفقة.
+5. أنني اطلعت على نظام الاستشارة ودفتر الشروط الخاصة وأقبل مقتضياتهما.
+6. أنني أُلزم نفسي بإشعار صاحب المشروع بكل تغيير يطرأ على المعلومات الواردة أعلاه.
+
+حرر بـ ........................ في ........................
+
+الإمضاء والختم`;
+  return `${hdr}
+
+إلى السيد(ة) ${v(t.acheteur,'صاحب المشروع')}
+
+الموضوع: إيداع عرض في إطار ${TYPES[t.type] || 'الصفقة'} رقم ${v(t.ref,'رقم الصفقة')}
+المتعلق بـ ${v(t.objet,'موضوع الصفقة')}
+
+تحية طيبة وبعد،
+يشرفني أن أضع رهن إشارتكم عرضي المتعلق بالصفقة المذكورة أعلاه، والمتضمن للملف الإداري والملف التقني والعرض المالي، وذلك داخل الأجل المحدد لإيداع العروض.
+
+وتفضلوا بقبول فائق التقدير والاحترام.
+
+حرر بـ ........................ في ........................
+
+${v(c.manager,'الاسم الكامل')} – ${v(c.role,'الصفة')}
+الإمضاء والختم`;
+}
+
+/* ========== الأحداث ========== */
+document.addEventListener('click', e => {
+  const nv = e.target.closest('#nav a'); if(nv){ go(nv.dataset.v); return; }
+  if(e.target.id === 'modal'){ closeModal(); return; }
+  const el = e.target.closest('[data-a]'); if(!el) return;
+  const a = el.dataset.a, id = el.dataset.id;
+  if(el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') return;
+  switch(a){
+    case 'addTender': tenderForm(); break;
+    case 'editTender': tenderForm(S.tenders.find(t => t.id === id)); break;
+    case 'saveTender': saveTender(id); break;
+    case 'delTender': if(confirm('نمسح هاد الصفقة؟')){ S.tenders = S.tenders.filter(t => t.id !== id); save(); go('tenders'); } break;
+    case 'open': go('tender', id); break;
+    case 'back': go('tenders'); break;
+    case 'filter': filter = id; render(); break;
+    case 'goDocs': go('docs'); break;
+    case 'toTools': tplTender = id; go('tools'); break;
+    case 'addDoc': docForm(); break;
+    case 'editDoc': docForm(S.docs.find(d => d.id === id)); break;
+    case 'saveDoc': saveDoc(id); break;
+    case 'delDoc': if(confirm('نمسح هاد الوثيقة؟')){ S.docs = S.docs.filter(d => d.id !== id); save(); render(); } break;
+    case 'closeModal': closeModal(); break;
+    case 'tpl': showTpl(id); break;
+    case 'export': exportData(); break;
+    case 'import': $('#impf').click(); break;
+    case 'reset': if(confirm('هادشي غادي يمسح كل المعطيات نهائياً. متأكد؟')){ S = EMPTY(); save(); go('home'); toast('تم المسح'); } break;
+  }
+});
+document.addEventListener('change', e => {
+  const el = e.target;
+  if(el.dataset && el.dataset.a === 'check'){
+    const t = S.tenders.find(x => x.id === el.dataset.id); if(!t) return;
+    t.checklist = t.checklist || {}; t.checklist[el.dataset.k] = el.checked; save(); render();
+  } else if(el.dataset && el.dataset.a === 'tplTender'){ tplTender = el.value; $('#tpl_out').innerHTML = ''; }
+  else if(el.id === 'impf') importData(el.files[0]);
+});
+document.addEventListener('input', e => {
+  const el = e.target, d = el.dataset || {};
+  if(d.calc === 'g') calcG(); else if(d.calc === 'o') calcO();
+  else if(d.a === 'notes'){ const t = S.tenders.find(x => x.id === d.id); if(t){ t.notes = el.value; save(); } }
+  else if(d.a === 'company'){ S.company = S.company || {}; S.company[d.k] = el.value; save(); }
+});
+
+function closeModal(){ $('#modal').classList.remove('show'); }
+function saveTender(id){
+  const g = k => $('#f_' + k).value.trim();
+  if(!g('ref') && !g('objet')){ toast('دخل رقم الصفقة أو الموضوع'); return; }
+  const data = { ref:g('ref'), objet:g('objet'), acheteur:g('acheteur'), type:g('type'), cat:g('cat'),
+    estimate:g('estimate'), deadline:g('deadline'), opening:g('opening'), status:g('status') };
+  if(id){ const t = S.tenders.find(x => x.id === id); Object.assign(t, data); }
+  else S.tenders.push(Object.assign({ id: uid(), checklist:{}, notes:'' }, data));
+  save(); closeModal(); render(); toast('تم الحفظ ✔');
+}
+function saveDoc(id){
+  const name = $('#d_name').value.trim(); if(!name){ toast('دخل اسم الوثيقة'); return; }
+  const data = { name, expiry:$('#d_exp').value, note:$('#d_note').value.trim() };
+  if(id){ Object.assign(S.docs.find(x => x.id === id), data); } else S.docs.push(Object.assign({ id: uid() }, data));
+  save(); closeModal(); render(); toast('تم الحفظ ✔');
+}
+function showTpl(kind){
+  const txt = tplText(kind);
+  $('#tpl_out').innerHTML = `<pre class="tpl" id="tpl_pre">${esc(txt)}</pre>
+    <div class="row"><button class="sm" data-a="copyTpl">📋 نسخ</button><button class="sm sec" data-a="printTpl">🖨️ طباعة</button></div>`;
+  $('#tpl_out').onclick = ev => {
+    const b = ev.target.closest('[data-a]'); if(!b) return;
+    if(b.dataset.a === 'copyTpl'){
+      (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => toast('تم النسخ ✔')).catch(() => toast('تعذّر النسخ'));
+    } else if(b.dataset.a === 'printTpl'){ $('#printArea').textContent = txt; window.print(); }
+  };
+}
+function exportData(){
+  const b = new Blob([JSON.stringify(S, null, 2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(b);
+  a.download = `ataa-backup-${new Date().toISOString().slice(0,10)}.json`; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+function importData(f){
+  if(!f) return; const r = new FileReader();
+  r.onload = () => { try {
+    const d = JSON.parse(r.result);
+    if(!d || !Array.isArray(d.tenders)) throw 0;
+    if(!confirm('الاستيراد غادي يعوّض المعطيات الحالية. نكمل؟')) return;
+    S = Object.assign(EMPTY(), d); save(); go('home'); toast('تم الاستيراد ✔');
+  } catch(e){ toast('ملف غير صالح'); } };
+  r.readAsText(f);
+}
+
+/* ========== تشغيل ========== */
+render();
+setInterval(() => { if(view === 'home' || view === 'tenders') render(); }, 60000);
+if('serviceWorker' in navigator){ window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(()=>{})); }
+</script>
+</body>
+</html>
